@@ -1,0 +1,8 @@
+{
+  "data": "synthetic",
+  "n_skus": 60,
+  "n_days": 900,
+  "train_end": 558,
+  "test_start": 702,
+  "n_test_days": 198
+}
