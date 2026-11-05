@@ -352,36 +352,27 @@ results_m5/
 
 ---
 
-# Project Layout
+## Project Layout
 
-run_pipeline.py
+```text
+inventory-decision-engine/
+│
+├── run_pipeline.py              
 │
 ├── src/
-│   ├── data.py
-│   │   └── Synthetic data generator + M5 loader
-│   │
-│   ├── forecast.py
-│   │   └── Features, ML models, baseline and forecast metrics
-│   │
-│   ├── inventory.py
-│   │   └── Daily inventory simulation
-│   │
-│   └── report.py
-│       └── Tables and charts
+│   ├── data.py                 
+│   ├── forecast.py            
+│   ├── inventory.py             
+│   └── report.py               
 │
 ├── tests/
-│   └── test_pipeline.py
-│       └── Sanity and data-leakage checks
+│   └── test_pipeline.py         
 │
-├── results/
-│   └── Synthetic experiment outputs
+├── results/                     
 │
 └── results_m5/
-    └── M5 experiment outputs
-
-
----
-
+```
+        
 # Ideas to Extend the Project
 
 - Add **lead-time variability** directly to the safety-stock calculation.
