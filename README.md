@@ -1,5 +1,5 @@
 
-```markdown
+
 # From Forecast to Stock Decision: Cutting Inventory Without Losing Sales
 
 A retail demand-forecasting model is only useful if it changes how much stock you order.
