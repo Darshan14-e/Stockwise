@@ -1,0 +1,81 @@
+60 SKUs x 900 days  |  train < day 558, validation < day 702, test = last 198 days
+rows: train 29,776  validation 8,296  test 11,536
+
+Forecast quality on unseen test days
+                   metric alpha  baseline  ml_error  ml_quantile
+     WAPE (mean forecast)     -     0.230     0.189          NaN
+             pinball loss   0.8     3.889     2.970        2.996
+coverage (target = alpha)   0.8     0.785     0.818        0.790
+             pinball loss   0.9     2.705     1.957        1.976
+coverage (target = alpha)   0.9     0.860     0.900        0.887
+             pinball loss  0.95     1.808     1.211        1.210
+coverage (target = alpha)  0.95     0.903     0.939        0.932
+             pinball loss  0.98     1.068     0.613        0.604
+coverage (target = alpha)  0.98     0.938     0.967        0.968
+             pinball loss  0.99     0.736     0.362        0.347
+coverage (target = alpha)  0.99     0.954     0.977        0.980
+
+Data health
+  training target ratio (lead-time demand / recent run-rate): median 0.97, 99th pct 2.4, max 5; 0.04% of rows above the cap of 4
+  training rows with no sales in the previous 28 days: 0.00%
+  test bias (forecast total vs actual total): ML mean +0.4%, moving average +0.6%
+
+Policy curves (test period)
+     policy  alpha  fill_rate  stockout_rate  avg_inventory_value  holding_cost  lost_margin  total_cost
+   baseline  0.200      0.707          0.373           124598.570     15702.834  7595613.357 7611316.190
+   baseline  0.300      0.764          0.303           167901.669     21160.210  6099743.337 6120903.547
+   baseline  0.400      0.807          0.252           212990.492     26842.637  4984584.607 5011427.244
+   baseline  0.500      0.841          0.207           259739.051     32734.237  4085622.750 4118356.987
+   baseline  0.600      0.871          0.166           314874.737     39682.844  3300936.600 3340619.444
+   baseline  0.700      0.897          0.133           380423.203     47943.746  2620754.152 2668697.898
+   baseline  0.800      0.921          0.099           465878.810     58713.494  1994574.374 2053287.868
+   baseline  0.850      0.933          0.084           522635.247     65866.360  1683616.060 1749482.420
+   baseline  0.900      0.946          0.065           596453.432     75169.474  1347250.268 1422419.742
+   baseline  0.950      0.962          0.045           712003.877     89731.995   960915.621 1050647.617
+   baseline  0.980      0.973          0.031           850861.097    107231.810   658742.739  765974.549
+   baseline  0.990      0.980          0.025           946430.579    119276.183   500722.806  619998.988
+   baseline  0.995      0.984          0.020          1035273.020    130472.764   391513.130  521985.894
+   baseline  0.999      0.990          0.012          1223058.962    154138.938   241666.125  395805.063
+   ml_error  0.200      0.717          0.372           113361.481     14286.652  7419496.081 7433782.733
+   ml_error  0.300      0.775          0.304           149691.348     18865.211  5847193.097 5866058.308
+   ml_error  0.400      0.820          0.248           188143.814     23711.275  4673345.820 4697057.095
+   ml_error  0.500      0.857          0.201           230245.096     29017.190  3709633.759 3738650.949
+   ml_error  0.600      0.889          0.156           278928.083     35152.580  2873347.100 2908499.681
+   ml_error  0.700      0.917          0.117           338752.880     42692.144  2130655.584 2173347.728
+   ml_error  0.800      0.943          0.082           419830.034     52910.086  1470821.941 1523732.027
+   ml_error  0.850      0.955          0.065           474457.215     59794.608  1148796.565 1208591.173
+   ml_error  0.900      0.966          0.048           549513.463     69253.752   852245.344  921499.095
+   ml_error  0.950      0.979          0.029           668204.629     84212.090   542545.078  626757.168
+   ml_error  0.980      0.988          0.017           808559.305    101900.625   318544.799  420445.424
+   ml_error  0.990      0.992          0.012           905336.839    114097.245   220301.822  334399.068
+   ml_error  0.995      0.994          0.009           995632.710    125476.999   156266.721  281743.720
+   ml_error  0.999      0.997          0.005          1183846.534    149197.097    66715.067  215912.164
+ml_quantile  0.500      0.845          0.215           214348.455     27013.778  4021414.414 4048428.192
+ml_quantile  0.600      0.875          0.177           256757.692     32358.504  3242413.238 3274771.742
+ml_quantile  0.700      0.905          0.135           313205.637     39472.491  2451919.789 2491392.280
+ml_quantile  0.800      0.933          0.093           393661.727     49612.163  1711748.551 1761360.714
+ml_quantile  0.850      0.949          0.072           451316.506     56878.245  1310776.914 1367655.158
+ml_quantile  0.900      0.962          0.052           518873.900     65392.327   959358.131 1024750.458
+ml_quantile  0.950      0.977          0.032           639540.968     80599.684   586385.867  666985.551
+ml_quantile  0.980      0.988          0.017           808710.124    101919.632   306993.701  408913.333
+ml_quantile  0.990      0.993          0.011           931793.844    117431.553   183374.790  300806.343
+
+Sensitivity at alpha = 0.95
+                            scenario      policy  fill_rate  avg_inventory_value  total_cost
+                          As planned    baseline      0.962           712003.877 1050647.617
+                          As planned    ml_error      0.979           668204.629  626757.168
+                          As planned ml_quantile      0.977           639540.968  666985.551
+Suppliers 2 days slower than planned    baseline      0.847           388504.828 4033781.323
+Suppliers 2 days slower than planned    ml_error      0.858           341663.861 3785926.520
+Suppliers 2 days slower than planned ml_quantile      0.851           332124.004 3995284.159
+  Demand jumps 25% after test day 30    baseline      0.955           833623.015 1499691.960
+  Demand jumps 25% after test day 30    ml_error      0.959           647771.402 1381586.022
+  Demand jumps 25% after test day 30 ml_quantile      0.964           695589.365 1204957.184
+
+Stock needed to hit the same fill rate (interpolated; positive saving = less stock than baseline)
+ fill_rate_target  baseline_inventory_value  ml_error_inventory_value  ml_quantile_inventory_value  ml_quantile_saving_vs_baseline_pct  ml_error_saving_vs_baseline_pct
+             0.93                507493.583                380031.209                   384257.127                              24.283                           25.116
+             0.95                624392.375                453016.169                   457287.957                              26.763                           27.447
+             0.97                810576.996                583823.632                   581567.298                              28.253                           27.974
+             0.98                956415.826                686813.276                   683703.592                              28.514                           28.189
+charts written to results/

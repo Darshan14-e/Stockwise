@@ -1,0 +1,15 @@
+{
+  "data": "m5",
+  "n_skus": 60,
+  "n_days": 900,
+  "train_end": 558,
+  "test_start": 702,
+  "n_test_days": 198,
+  "unit_label": "US$ thousand",
+  "unit_scale": 1000.0,
+  "target_cap": 4.0,
+  "common_fill_range": [
+    0.8477,
+    0.9797
+  ]
+}

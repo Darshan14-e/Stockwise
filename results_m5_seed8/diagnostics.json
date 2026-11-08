@@ -1,0 +1,10 @@
+{
+  "train_target_ratio_median": 0.9828571428571429,
+  "train_target_ratio_p99": 9.575641025641014,
+  "train_target_ratio_max": 773.75,
+  "train_rows_ratio_above_cap_pct": 1.676015181540322,
+  "train_rows_with_zero_28d_sales_pct": 2.93890437644846,
+  "test_ml_mean_bias_pct": -0.7735549918642892,
+  "test_baseline_bias_pct": -0.847327400582365,
+  "target_cap_used": 4.0
+}
