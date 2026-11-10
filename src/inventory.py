@@ -1,29 +1,9 @@
-"""Daily inventory simulation under an order-up-to policy.
-
-Timeline for each SKU on each day d (a day is a full cycle):
-  1. Orders that were due today arrive and join on-hand stock.
-  2. Customers buy. Anything we cannot supply is a lost sale (no backorders).
-  3. We look at inventory position = on-hand + already-ordered-but-not-arrived,
-     and order enough to bring it up to today's target level S[d].
-  4. The order arrives `lead_time` days later, so it can serve demand on day d+lead_time.
-Target S[d] therefore has to cover demand on days d+1 ... d+lead_time, which is
-exactly what the forecasting module predicts.
-"""
 import numpy as np
 import pandas as pd
 
 
 def simulate(D_true, S, lead_actual, unit_cost, price, hold_rate=0.25,
              order_cost=0.0, warmup=14, detail=False):
-    """Run the simulation for all SKUs at once.
-
-    D_true      (T, n) units demanded each day
-    S           (T, n) order-up-to level chosen at the end of each day
-    lead_actual (n,)   days an order really takes to arrive
-    unit_cost, price (n,) in rupees; hold_rate = yearly holding cost as a share of unit cost;
-    order_cost = fixed cost per order placed (0 by default: with daily review every policy orders
-    almost daily, so it would not separate them; orders are still counted). Metrics skip the first `warmup` days.
-    """
     D_true = np.asarray(D_true, dtype=float)
     T, n = D_true.shape
     lead = np.asarray(lead_actual, dtype=int)
@@ -74,14 +54,12 @@ def simulate(D_true, S, lead_actual, unit_cost, price, hold_rate=0.25,
 
 
 def pivot_targets(df, values, n_days, skus, t0):
-    """Turn a long (sku, t) table of targets into a (days from t0, SKUs) matrix."""
     s = pd.Series(np.asarray(values), index=pd.MultiIndex.from_arrays([df["t"], df["sku"]]))
     mat = s.unstack("sku").reindex(index=range(t0, n_days), columns=skus)
     return mat.to_numpy()
 
 
 def interp_at_fill(curve, target_fill):
-    """Average inventory value needed to reach `target_fill`, by interpolating a policy's curve."""
     c = curve.sort_values("fill_rate")
     if not (c["fill_rate"].min() <= target_fill <= c["fill_rate"].max()):
         return float("nan")

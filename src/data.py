@@ -1,12 +1,4 @@
-"""Demand data: a synthetic retail generator and an M5 (Walmart) loader.
 
-Both return the same three objects so the rest of the pipeline does not care
-where the data came from:
-
-    D     DataFrame  (days x SKUs)  daily units sold
-    P     DataFrame  (days x SKUs)  True on promotion days (assumed to be a known, planned calendar)
-    info  DataFrame  one row per SKU: unit_cost, price, lead_time (days)
-"""
 from pathlib import Path
 
 import numpy as np
@@ -19,14 +11,6 @@ TRAIN_FRACTION = 0.62   # must match the train/validation split in run_pipeline.
 # Synthetic retail demand
 # --------------------------------------------------------------------------
 def generate_synthetic(n_skus=60, n_days=900, seed=7, start="2023-01-01"):
-    """Daily demand for a small store assortment.
-
-    Each SKU gets its own level, weekly pattern, yearly seasonality, trend,
-    promotions (with an uplift) and over-dispersed (negative binomial) noise.
-    About 20% of SKUs are slow, intermittent sellers. Costs, prices and
-    supplier lead times are drawn per SKU so the inventory maths has
-    something realistic to chew on.
-    """
     rng = np.random.default_rng(seed)
     dates = pd.date_range(start, periods=n_days, freq="D")
     t = np.arange(n_days)
@@ -75,16 +59,6 @@ def generate_synthetic(n_skus=60, n_days=900, seed=7, start="2023-01-01"):
 # M5 (Walmart) loader
 # --------------------------------------------------------------------------
 def load_m5(m5_dir, store_id="CA_1", n_skus=60, n_days=900, seed=7):
-    """Load the Kaggle M5 Forecasting dataset for one store.
-
-    Expects these files in `m5_dir` (download from Kaggle, "M5 Forecasting -
-    Accuracy"): calendar.csv, sell_prices.csv and sales_train_evaluation.csv
-    (or sales_train_validation.csv).
-
-    M5 has no cost or lead-time data, so they are assumed here and kept
-    reproducible with `seed`: unit cost = 70% of the median training-period shelf price and
-    lead times are drawn from 2-10 days. Say so in your write-up.
-    """
     m5_dir = Path(m5_dir)
     sales_file = next(
         (m5_dir / f for f in ("sales_train_evaluation.csv", "sales_train_validation.csv")

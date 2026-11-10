@@ -1,13 +1,3 @@
-"""Lead-time demand forecasting.
-
-The inventory decision needs one number per SKU per day: how much will we sell
-over the supplier lead time (the days between ordering and the stock arriving)?
-So instead of forecasting daily demand and summing, we forecast that
-lead-time total directly, as a mean and as several upper quantiles.
-
-Everything the model sees at decision day t uses only data up to day t, plus
-the promotion calendar, which retailers plan in advance.
-"""
 import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
@@ -90,12 +80,6 @@ def make_features(D, P, lead_times, t_idx):
 
 
 class LeadTimeForecaster:
-    """LightGBM models for the lead-time demand: one mean + one per quantile.
-
-    Targets are divided by `base` (28-day average x lead time) so a single
-    model can learn from fast and slow SKUs together.
-    """
-
     def __init__(self, alphas=Q_ALPHAS, seed=0, target_cap=TARGET_CLIP):
         self.target_cap = target_cap
         params = dict(
@@ -127,13 +111,11 @@ class LeadTimeForecaster:
 
 
 def training_ratio(df, cap=TARGET_CLIP):
-    """Training target: lead-time demand relative to the recent run-rate, capped at `cap` (0 or None = no cap)."""
     ratio = df["y"] / df["base"]
     return ratio.clip(upper=cap) if cap else ratio
 
 
 def baseline_quantile(df, alpha):
-    """Textbook policy: recent average x lead time + z * recent std * sqrt(lead time)."""
     return df["base"].to_numpy() + norm.ppf(alpha) * df["std28"].to_numpy() * np.sqrt(df["H"].to_numpy())
 
 

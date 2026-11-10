@@ -1,6 +1,4 @@
-"""Charts for the README. Colours follow a validated 3-slot categorical palette
-(blue, orange, aqua); the aqua is below 3:1 on a light surface, so every line
-is also direct-labelled and uses its own marker shape."""
+
 from pathlib import Path
 
 import matplotlib
